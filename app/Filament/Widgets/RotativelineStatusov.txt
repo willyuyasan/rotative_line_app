@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Filament\Widgets;
+
+use Filament\Widgets\StatsOverviewWidget as BaseWidget;
+use Filament\Widgets\StatsOverviewWidget\Stat;
+use Filament\Support\Enums\IconPosition;
+
+use App\Models\Rotativeline;
+
+class RotativelineStatusov extends BaseWidget
+{   
+    protected int | string | array $columnSpan = 'full';
+    protected static ?int $sort = 1;
+    protected function getStats(): array
+    {
+        return [
+            //
+            Stat::make('Default', Rotativeline::query()->where('status', 'DEFAULT')->count())
+            ->color('danger'),
+
+            Stat::make('Up_to_date', Rotativeline::query()->where('status', 'OK')->count())
+            ->description('Rotative lines without novelties up today')
+            ->descriptionIcon('heroicon-m-arrow-trending-up', IconPosition::Before)
+            ->color('warning'),
+
+            Stat::make('Closed', Rotativeline::query()->where('status', 'COMPLETED')->count())
+            ->color('success'),
+        ];
+    }
+}

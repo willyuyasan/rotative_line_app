@@ -1,0 +1,102 @@
+install vscode extensions:
+https://www.youtube.com/watch?v=EliywWn4IK4&t=0s
+support repo for this project:
+https://github.com/tonyxhepa/filamentphp-v3-tutorial/blob/main/app/Filament/Resources/UserResource.php
+
+
+
+#DB changes
+all the DB changes has to be made in .env file
+some especial postgres db from NEON or vercel, requires that you feed with DB_URL = DATABASE_URL_UNPOOLED instead of credentials
+use:
+php artisan migrate:fresh
+php artisan db:seed
+or:
+php artisan migrate:fresh --seed
+
+
+
+#follow the get started info of filament
+#create the admin user
+php artisan make:filament-user
+
+#add the spatie component to manage roles and permissions (follow the spatie doc)
+https://spatie.be/docs/laravel-permission/v6/installation-laravel
+composer require spatie/laravel-permission --ignore-platform-reqs
+
+
+#Refresh de seeder to add role to users
+#midify the DatabaseSeeder as here is showed
+php artisan migrate:fresh --seed
+
+
+#Create the resources for managing users
+php artisan make:filament-resource User --view
+
+php artisan make:model Role -m
+php artisan make:model Permission -m
+php artisan make:filament-resource Role --view --generate
+php artisan make:filament-resource Permission --view --generate
+
+
+#Creating models policies to control role access to the views
+php artisan make:policy UserPolicy --model=User
+php artisan make:policy RolePolicy --model=Role
+php artisan make:policy PermissionPolicy --model=Permission
+
+and modify the permisions over the actions in the policy folder
+
+php artisan cache:forget spatie.permission.cache 
+php artisan permission:cache-reset
+php artisan cache:clear
+
+finally configure a gate to allow a super admin
+go to: 
+Providers/AppServiceProvider.php
+
+
+
+#Optimaze app
+php artisan filament:optimize
+
+#Optimize cache
+php artisan filament:optimize-clear
+
+
+
+php artisan make:model Product -m
+php artisan make:model Rotativeline -m
+php artisan make:model Paymentplanquote -m
+php artisan make:model Status -m
+
+php artisan migrate
+php artisan make:migration
+
+php artisan make:filament-resource Product
+php artisan make:filament-resource Status --generate --view
+php artisan make:filament-resource Rotativeline --generate --view
+
+php artisan make:filament-page ViewRotativeLine --resource=RotativeLineResource --type=ViewRecord
+
+
+
+php artisan make:filament-relation-manager RotativeLineResource quote capital_fee_amount
+php artisan make:filament-relation-manager StatusResource rotativeline number_line
+
+php artisan make:cast MoneyCast
+
+
+#Stat widgets
+php artisan make:filament-widget RotativelineStatusov --stats-overview
+
+php artisan make:filament-widget RotativelineChart  --chart
+composer require flowframe/laravel-trend --ignore-platform-reqs
+
+#install extended stat chrts https://v2.filamentphp.com/plugins/apex-charts#installation
+composer require leandrocfe/filament-apex-charts --ignore-platform-reqs
+php artisan make:filament-apex-charts GradienircleChart
+
+#Clear cache
+php artisan filament:optimize-clear
+
+

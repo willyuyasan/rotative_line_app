@@ -1,0 +1,100 @@
+<?php
+
+namespace App\Filament\Widgets;
+
+use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
+
+class GradientCircleChart extends ApexChartWidget
+{
+    /**
+     * Chart Id
+     */
+    protected static ?string $chartId = 'gradientCircleChart';
+
+    /**
+     * Widget Title
+     */
+    protected static ?string $heading = 'ICV';
+    protected static ?int $sort = 2;
+
+    /**
+     * Chart options (series, labels, types, size, animations...)
+     * https://apexcharts.com/docs/options
+     */
+    protected function getOptions(): array
+    {
+        return [
+            'chart' => [
+                'type' => 'radialBar',
+                'height' => 370,
+                'toolbar' => [
+                    'show' => false,
+                ],
+            ],
+            'series' => [40.3],
+            'plotOptions' => [
+                'radialBar' => [
+                    'startAngle' => -135,
+                    'endAngle' => 135,
+                    'hollow' => [
+                        'margin' => 0,
+                        'size' => '70%',
+                        'dropShadow' => [
+                            'enabled' => true,
+                            'top' => 3,
+                            'left' => 0,
+                            'blur' => 4,
+                            'opacity' => 0.24,
+                        ],
+                    ],
+                    'track' => [
+                        'background' => '#fff',
+                        'strokeWidth' => '90%',
+                        'margin' => 0,
+                        'dropShadow' => [
+                            'enabled' => true,
+                            'top' => -3,
+                            'left' => 0,
+                            'blur' => 4,
+                            'opacity' => 0.35,
+                        ],
+                    ],
+                    'dataLabels' => [
+                        'show' => true,
+                        'name' => [
+                            'show' => true,
+                            'offsetY' => -10,
+                            'color' => '#9ca3af',
+                            'fontWeight' => 600,
+                        ],
+                        'value' => [
+                            'show' => true,
+                            'color' => '#9ca3af',
+                            'fontWeight' => 600,
+                        ],
+                    ],
+
+                ],
+            ],
+            'fill' => [
+                'type' => 'gradient',
+                'gradient' => [
+                    'shade' => 'dark',
+                    'type' => 'horizontal',
+                    'shadeIntensity' => 0.5,
+                    'gradientToColors' => ['#50c754'],
+                    'inverseColors' => true,
+                    'opacityFrom' => 1,
+                    'opacityTo' => 1,
+                    'stops' => [0, 100],
+                ],
+            ],
+            'stroke' => [
+                'lineCap' => 'round',
+            ],
+            'labels' => ['Percent'],
+            'colors' => ['#f43f5e'],
+
+        ];
+    }
+}
